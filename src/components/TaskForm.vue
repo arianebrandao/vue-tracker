@@ -17,15 +17,15 @@
           class="is-flex is-align-items-center is-justify-content-space-between"
         >
           <section>
-            <strong>00:00:00</strong>
+            <strong>{{ tempoDecorrido }}</strong>
           </section>
-          <button class="button">
+          <button class="button" @click="start">
             <span class="icon">
               <i class="fas fa-play"></i>
             </span>
             <span>play</span>
           </button>
-          <button class="button">
+          <button class="button" @click="stop">
             <span class="icon">
               <i class="fas fa-stop"></i>
             </span>
@@ -42,6 +42,32 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "TaskForm",
+  //estado inicial do component
+  data() {
+    return {
+      tempoEmSegundos: 0,
+      cronometro: 0,
+    };
+  },
+  //monitora informação e atualiza quando é alterada
+  computed: {
+    tempoDecorrido() : string {
+      return new Date(this.tempoEmSegundos * 1000).toISOString().substr(11,8)
+    }
+  },
+  //funcoes que esse componente executa
+  methods: {
+    start() {
+      //começar contagem
+      //1s = 1000 ms
+      this.cronometro = setInterval(() => {
+        this.tempoEmSegundos += 1;
+      }, 1000);
+    },
+    stop() {
+      clearInterval(this.cronometro)
+    },
+  },
 });
 </script>
 
