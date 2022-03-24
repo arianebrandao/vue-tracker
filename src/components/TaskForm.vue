@@ -10,28 +10,11 @@
           type="text"
           class="input"
           placeholder="Qual tarefa você deseja iniciar?"
+          v-model="descricao"
         />
       </div>
       <div class="column">
-        <div
-          class="is-flex is-align-items-center is-justify-content-space-between"
-        >
-          <section>
-            <strong>{{ tempoDecorrido }}</strong>
-          </section>
-          <button class="button" @click="start">
-            <span class="icon">
-              <i class="fas fa-play"></i>
-            </span>
-            <span>play</span>
-          </button>
-          <button class="button" @click="stop">
-            <span class="icon">
-              <i class="fas fa-stop"></i>
-            </span>
-            <span>stop</span>
-          </button>
-        </div>
+        <TimerController @aoTemporizadorFinalizado="finalizarTarefa" />
       </div>
     </div>
   </div>
@@ -39,35 +22,27 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import TimerController from './TimerController.vue'
 
 export default defineComponent({
   name: "TaskForm",
-  //estado inicial do component
-  data() {
-    return {
-      tempoEmSegundos: 0,
-      cronometro: 0,
-    };
+  // componentes filhos
+  components: {
+    TimerController,
   },
-  //monitora informação e atualiza quando é alterada
-  computed: {
-    tempoDecorrido() : string {
-      return new Date(this.tempoEmSegundos * 1000).toISOString().substr(11,8)
+  data () {
+    return {
+      descricao: '',
     }
   },
-  //funcoes que esse componente executa
   methods: {
-    start() {
-      //começar contagem
-      //1s = 1000 ms
-      this.cronometro = setInterval(() => {
-        this.tempoEmSegundos += 1;
-      }, 1000);
-    },
-    stop() {
-      clearInterval(this.cronometro)
-    },
-  },
+    finalizarTarefa(tempoDecorrido: number) : void {
+      console.log('tempo da tarefa', tempoDecorrido)
+      console.log('descricao da tarefa', this.descricao)
+
+      this.descricao = ''
+    }
+  }
 });
 </script>
 
